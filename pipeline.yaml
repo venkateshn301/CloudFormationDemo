@@ -4,11 +4,11 @@ Parameters:
   GitHubOwner:
     Type: String
     AllowedPattern: '[A-Za-z0-9-]+'
-    Default: quick-refs
+    Default: venkateshn301
   GitHubRepository:
     Type: String
     AllowedPattern: '[A-Za-z0-9-]+'
-    Default: Deloitte
+    Default: CloudFormationDemo
   GitHubBranch:
     Type: String
     AllowedPattern: '[A-Za-z0-9-]+'
