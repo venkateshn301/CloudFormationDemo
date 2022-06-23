@@ -24,10 +24,6 @@ Parameters:
     Type: String
     Description: The name of the subnet from VPC stack to import for subnet 2
     Default: App1Subnet2
-  VPCImportApp1Instance1Subnet3:
-    Type: String
-    Description: The name of the subnet from VPC stack to import for subnet 3
-    Default: App1Subnet3
   VPCImportALB1Subnet1:
     Type: String
     Description: The name of the subnet from VPC stack to import
@@ -36,32 +32,14 @@ Parameters:
     Type: String
     Description: The name of the subnet from VPC stack to import
     Default: ALB1Subnet2
-  VPCImportALB1Subnet3:
-    Type: String
-    Description: The name of the subnet from VPC stack to import
-    Default: ALB1Subnet3
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
-    Default: t3.micro
+    Default: t2.micro
     AllowedValues:
       - t3.nano
       - t3.micro
-      - t3.small
-      - t3.medium
-      - t3.large
-      - t2.nano
       - t2.micro
-      - t2.small
-      - t2.medium
-      - t2.large
-      - m5.medium
-      - m5.large
-      - m5.xlarge
-      - m5.2xlarge
-      - m5.4xlarge
-      - m5.12xlarge
-      - m5.24xlarge
     ConstraintDescription: must be a valid EC2 instance type.
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
@@ -81,13 +59,14 @@ Parameters:
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   Web1AutoScaleDesired:
-    Default: '3'
+    Default: '2'
     Description: The desired number of web instances in auto scaling group
     Type: Number
-    MinValue: '3'
+    MinValue: '2'
     MaxValue: '6'
-    ConstraintDescription: must be between 3 and 6 EC2 instances.
+    ConstraintDescription: must be between 2 and 6 EC2 instances.
 Resources:
+  
   DynamoDBServiceMockTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
@@ -138,8 +117,6 @@ Resources:
           'Fn::Sub': '${VPCImportName}-${VPCImportALB1Subnet1}'
         - !ImportValue 
           'Fn::Sub': '${VPCImportName}-${VPCImportALB1Subnet2}'
-        - !ImportValue 
-          'Fn::Sub': '${VPCImportName}-${VPCImportALB1Subnet3}'
   ALB1Listener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
@@ -201,10 +178,8 @@ Resources:
           'Fn::Sub': '${VPCImportName}-App1Subnet1'
         - !ImportValue 
           'Fn::Sub': '${VPCImportName}-App1Subnet2'
-        - !ImportValue 
-          'Fn::Sub': '${VPCImportName}-App1Subnet3'
       LaunchConfigurationName: !Ref Web1LaunchConfig
-      MinSize: '3'
+      MinSize: '2'
       MaxSize: !Ref Web1AutoScaleDesired
       DesiredCapacity: !Ref Web1AutoScaleDesired
       TargetGroupARNs:
@@ -486,10 +461,9 @@ Metadata:
           - VPCImportName
           - VPCImportApp1Instance1Subnet1
           - VPCImportApp1Instance1Subnet2
-          - VPCImportApp1Instance1Subnet3
           - VPCImportALB1Subnet1
           - VPCImportALB1Subnet2
-          - VPCImportALB1Subnet3
+          
       - Label:
           default: Application Tier Configuration
         Parameters:
