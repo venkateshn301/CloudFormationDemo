@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  AWS CloudFormation Sample Template for a static web app. This template
-  installs a highly-available, scalable web application deployment.
+  AWS CloudFormation Sample Template for a static web app. 
 
 Parameters:
   NamingPrefix:
